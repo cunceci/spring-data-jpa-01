@@ -6,8 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pe.edu.cibertec.spring_data_jpa.entity.Customer;
 import pe.edu.cibertec.spring_data_jpa.entity.Film;
+import pe.edu.cibertec.spring_data_jpa.entity.Staff;
 import pe.edu.cibertec.spring_data_jpa.repository.CustomerRepository;
 import pe.edu.cibertec.spring_data_jpa.repository.FilmRepository;
+import pe.edu.cibertec.spring_data_jpa.repository.StaffRepository;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +26,9 @@ public class SpringDataJpaApplication implements CommandLineRunner {
 	@Autowired
 	FilmRepository filmRepository;
 
+	@Autowired
+	StaffRepository staffRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(SpringDataJpaApplication.class, args);
 	}
@@ -35,14 +40,51 @@ public class SpringDataJpaApplication implements CommandLineRunner {
 		/**
 		 * findAll()
 		 */
+		//List<Staff> staffs = (List<Staff>) staffRepository.findAll();
+		//staffs.forEach(System.out::println);
+
+		/**
+		 *
+		 * findById() - orElse()
+		 */
+
+		//Optional<Staff> optional = staffRepository.findById(1);
+		//Staff staff = optional.orElse(null);
+		//System.out.println(customer);
+
+
+		/**
+		 * entity
+		 */
+		//Staff staff = new Staff(null, "cune", "César",5, null,"cesar@mail.com",2, 1, "cune","12345678", new Date());
+		//staffRepository.save(staff);
+
+		/**
+		 * delete*/
+
+		 Optional<Staff> optional = staffRepository.findById(9);
+		 optional.ifPresentOrElse(
+		 (cus) -> {
+		 staffRepository.delete(cus);
+		 },
+		 () -> {
+		 System.out.println("Staff not found");
+		 }
+		 );
+
+
+
+		/**
+		 * findAll()
+		 */
 		//List<Customer> customers = (List<Customer>) customerRepository.findAll();
 		//customers.forEach(System.out::println);
 
 		/**
 		 * entity
 		 */
-			//Customer customer = new Customer(null, 1, "César", "Santos", "cesar@mail.com", 1, 1, new Date(), new Date());
-			//customerRepository.save(customer);
+		//Customer customer = new Customer(null, 1, "César", "Santos", "cesar@mail.com", 1, 1, new Date(), new Date());
+		//	customerRepository.save(customer);
 
 
 		/**
@@ -221,44 +263,44 @@ public class SpringDataJpaApplication implements CommandLineRunner {
 		/**
 		 * deleteAll
 		 */
-		Iterable<Customer> customers = customerRepository.findAllById(List.of(605, 606));
-		customerRepository.deleteAll(customers);
+		//Iterable<Customer> customers = customerRepository.findAllById(List.of(605, 606));
+		//customerRepository.deleteAll(customers);
 
 
 
 		/**
 		 * findAll - Caching
 
-
+		System.out.println("/n");
 		System.out.println("----------------------------------------------------");
-		System.out.println("findAll -> Primera llamada a MySQL");
+		System.out.println("Caching findAll -> Primera llamada a MySQL");
 		System.out.println("----------------------------------------------------");
 		Iterable<Film> iterable = filmRepository.findAll();
 		iterable.forEach((film) ->  {
 			//String cadena = film.getTitle() + " " + film.getDescription();
-			String message = String.format("%s:%s;", film.getFilm_id(), film.getTitle() );
-			System.out.println(message);
+			String message = String.format("%s : %s; ", film.getFilm_id(), film.getTitle() );
+			System.out.print(message);
 		});
 
 		System.out.println(" ");
 		System.out.println("------------- ---------------------------------------");
-		System.out.println("findAll -> Segunda llamada a MySQL");
+		System.out.println("Caching findAll -> Segunda llamada a MySQL");
 		System.out.println("----------------------------------------------------");
 		Iterable<Film> iterable2 = filmRepository.findAll();
 		iterable.forEach((film) ->  {
 			//String cadena = film.getTitle() + " " + film.getDescription();
-			String message = String.format("%s:%s;", film.getFilm_id(), film.getTitle() );
-			System.out.println(message);
+			String message = String.format("%s:%s; ", film.getFilm_id(), film.getTitle() );
+			System.out.print(message);
 		});
 
-		System.out.println(" ");
+		System.out.println("/n");
 		System.out.println("------------------------------------------------------");
 		System.out.println("save() -> Update del Film");
 		System.out.println("------------------------------------------------------");
 		Optional<Film> optional = filmRepository.findById(1);
 		optional.ifPresentOrElse(
 				(item) -> {
-					item.setTitle("JURASSIC PARM");
+					item.setTitle("JURASIC PARM");
 					filmRepository.save(item);
 				},
 				() -> {
@@ -273,8 +315,8 @@ public class SpringDataJpaApplication implements CommandLineRunner {
 		Iterable<Film> iterable3 = filmRepository.findAll();
 		iterable3.forEach((film) ->  {
 			//String cadena = film.getTitle() + " " + film.getDescription();
-			String message = String.format("%s:%s;", film.getFilm_id(), film.getTitle() );
-			System.out.println(message);
+			String message = String.format("%s:%s; ", film.getFilm_id(), film.getTitle() );
+			System.out.print(message);
 		});
 		 */
 

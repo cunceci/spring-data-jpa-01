@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Data
+@Data  //@Getter, @Setter, ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
